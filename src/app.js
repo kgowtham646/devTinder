@@ -2,20 +2,19 @@ const express =  require('express')
 const {isAuth} = require('./middleware/auth')
 const connectDb = require('./config/database')
 const User = require('./models/user')
+const cors = require('cors');
 const app = express()
 
+app.use(express.json())
+app.use(cors())
+
 app.post('/signup',async(req,res)=>{
-    const mockData = {
-        firstName : 'Gowtham',
-        email: 'gkn@gmail.com',
-        password: '1234gh'
-    }
+    const user = new User(req.body)
     try{
-        const user = new User(mockData)
         await user.save()
-        res.send(`${mockData.firstName} user added successfully`)
+        res.send(`${user.firstName} user added successfully`)
     } catch (err){
-        res.status(400).send('error is user ', err.message)
+        res.status(400).send('error in user ', err.message)
     }
    
 
